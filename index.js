@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-/************************************************/
+
+/*---------------------------------------*/
+
 const mongoose = require('mongoose');
 var cors = require('cors');
 mongoose.connect('mongodb+srv://lucasvaspicarneiro:%40Lucas130205@cluster0.ge3mv.mongodb.net/teste?retryWrites=true&w=majority')
@@ -10,63 +12,41 @@ mongoose.connect('mongodb+srv://lucasvaspicarneiro:%40Lucas130205@cluster0.ge3mv
 .catch((error) => {
     console.error("Erro ao conectar ao MongoDB:", error);
 });
-/******************************************************/
+
+/*---------------------------------------------------------------------*/
+
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-/******************************************************/
+
+/*---------------------------------------------------------------------*/
+
+const productController = require('./controllers/ProductController');
+const serviceController = require('./controllers/ServiceController')
 
 /*Rotas HTTP*/
 
+/*------------------------------- Administrativo -------------------------------*/
+
 /* Cadastro de Produtos */
-// Adicionar um novo produto
-app.post("/product", (req, res) => {
-     
-});
-
-// Retorna todos os produtos
-app.get("/product", (req, res) => {
-
-});
-
-// exclui produto
-app.delete("/product/:id", (req, res) => {
-
-});
-
-// alterar produto
-app.put("/product/:id", (req,res) => {
-     
-});
+app.post("/product", productController.storeProduct);
+app.get("/product", productController.showProducts);
+app.delete("/product/:id", productController.destroyProduct);
+app.put("/product/:id", productController.updateProduct);
 
 /* Cadastro de Serviços */
-// Adicionar um novo Servico
-app.post("/service", (req, res) => {
+app.post("/service", serviceController.storeService);
+app.get("/service", serviceController.showService);
+app.delete("/service/:id", serviceController.destroyService);
+app.put("/service/:id", serviceController.updateService);
 
-});
-
-// Retorna todos os serviços
-app.get("/service", (req, res) => {
-
-});
-
-// exclui serviço
-app.delete("/service/:id", (req, res) => {
-
-});
-
-// alterar serviço
-app.put("/service/:id", (req,res) => {
-
-});
-
-/*****************************************************/
+/*----------------------------------------------------------------------------------*/
 
 /* Apresentação */
 app.get("/", (req, res) => {
-    res.send("Apresentacao Loja");
      // Landing Page
+    res.send("Apresentacao Loja");
 });
 
 /* Principal */
@@ -120,57 +100,22 @@ app.put("/user/carcompras/:id", (req, res) => {
 
 });
 
-/* Produtos Cães */
-// Landing Page dos Tipos de Produtos para cachorro
-app.get("/produtos/buscarproduto/dogs", (req, res) => {
+/* Produtos */
+// Filtro Simples dos produtos
+/* URL =  /produtos/buscarproduto/?tipoProduct=cachorro */
+/* URL =  /produtos/buscarproduto/?tipoProduct=gato */
+app.get("/product/buscarproduto", productController.indexProducts);
 
-});
-
-// Lista os Produtos filtrando só os de cachorros e destinado a higiene
-app.get("/produtos/buscarproduto/dogs/?tipoProduct=cachorro/?categoriaProduct=higiene", (req, res) => {
-     
-});
-
-// Lista os Produtos filtrando só os de cachorros e destinado a racao
-app.get("/produtos/buscarproduto/dogs/?tipoProduct=cachorro/?categoriaProduct=racao", (req, res) => {
-
-});
-
-// Lista os Produtos filtrando só os de cachorros e destinado a acessorios
-app.get("/produtos/buscarproduto/dogs/?tipoProduct=cachorro/?categoriaProduct=acessorio", (req, res) => {
-
-});
-
-// Lista os Produtos filtrando só os de cachorros e destinado a medicamentos
-app.get("/produtos/buscarproduto/dogs/?tipoProduct=cachorro/?categoriaProduct=medicamento", (req, res) => {
-
-});
-
-/* Produtos Gatos */
-// Landing Page dos Tipos de Produtos para gatos
-app.get("/produtos/buscarproduto/cats", (req, res) => {
-
-});
-
-// Lista os Produtos filtrando só os de gatos e destinado a higiene
-app.get("/produtos/buscarproduto/cats/?tipoProduct=gato/?categoriaProduct=higiene", (req, res) => {
-
-});
-
-// Lista os Produtos filtrando só os de gatos e destinado a racao
-app.get("/produtos/buscarproduto/cats/?tipoProduct=gato/?categoriaProduct=racao", (req, res) => {
-
-});
-
-// Lista os Produtos filtrando só os de gatos e destinado a acessorios
-app.get("/produtos/buscarproduto/cats/?tipoProduct=gato/?categoriaProduct=acessorio", (req, res) => {
-
-});
-
-// Lista os Produtos filtrando só os de gatos e destinado a medicamentos
-app.get("/produtos/buscarproduto/cats/?tipoProduct=gato/?categoriaProduct=medicamento", (req, res) => {
-
-});
+// Filtro Duplo dos Produtos
+/* URL = /produtos/buscarproduto?tipoProduct=cachorro&categoriaProduct=higiene*/
+/* URL = /produtos/buscarproduto?tipoProduct=cachorro&categoriaProduct=racao*/
+/* URL = /produtos/buscarproduto?tipoProduct=cachorro&categoriaProduct=acessórios*/
+/* URL = /produtos/buscarproduto?tipoProduct=cachorro&categoriaProduct=medicamentos*/
+/* URL = /produtos/buscarproduto?tipoProduct=gato&categoriaProduct=higiene*/
+/* URL = /produtos/buscarproduto?tipoProduct=gato&categoriaProduct=racao*/
+/* URL = /produtos/buscarproduto?tipoProduct=gato&categoriaProduct=acessórios*/
+/* URL = /produtos/buscarproduto?tipoProduct=gato&categoriaProduct=medicamentos*/
+app.get("/produtos/buscarproduto", productController.indexProductsDouble);
 
 /* Serviços */
 app.get("/servicos/buscarservico/?tipoService=vacinacao", (req, res) => {
@@ -208,5 +153,4 @@ app.post("/validarcomprar", (req, res) => {
 
 });
 
-/********************************************************/
 app.listen(3000, () => console.log("server starter"));
