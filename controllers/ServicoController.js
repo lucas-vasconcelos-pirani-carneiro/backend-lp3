@@ -25,7 +25,6 @@ module.exports = {
     },
 
     /* Filtro */
-
     async indexServico(req, res){
         let servico = await Servico.find(
         {tipoServico: req.query.tipoServico})
