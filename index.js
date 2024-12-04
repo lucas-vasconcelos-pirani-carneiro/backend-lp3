@@ -1,8 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
-/*---------------------------------------*/
-
+/*------------------------------------------*/
 const mongoose = require("mongoose");
 var cors = require("cors");
 mongoose.connect("mongodb+srv://lucasvaspicarneiro:%40Lucas130205@cluster0.ge3mv.mongodb.net/teste?retryWrites=true&w=majority",)
@@ -12,23 +10,18 @@ mongoose.connect("mongodb+srv://lucasvaspicarneiro:%40Lucas130205@cluster0.ge3mv
      .catch((error) => {
           console.error("Erro ao conectar ao MongoDB:", error);
      });
-
 /*---------------------------------------------------------------------*/
-
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
 /*---------------------------------------------------------------------*/
-
 const produtoController = require("./controllers/ProdutoController");
 const servicoController = require("./controllers/ServicoController");
 
 /*Rotas HTTP*/
 
 /*------------------------------- Administrativo -------------------------------*/
-
 /* Cadastro de Produtos */
 app.post("/produto", produtoController.storeProduto);
 app.get("/produto", produtoController.showProduto);
@@ -40,7 +33,6 @@ app.post("/servico", servicoController.storeServico);
 app.get("/servico", servicoController.showServico);
 app.delete("/servico/:id", servicoController.destroyServico);
 app.put("/servico/:id", servicoController.updateServico);
-
 /*----------------------------------------------------------------------------------*/
 
 /* Apresentação */
@@ -95,11 +87,11 @@ app.get("/produto/buscarproduto", produtoController.indexProduto);
 // Filtro Duplo dos Produtos
 /* URL = /produto/buscarproduto-duplo?tipoProduto=cachorro&categoriaProduto=higiene*/
 /* URL = /produto/buscarproduto-duplo?tipoProduto=cachorro&categoriaProduto=racao*/
-/* URL = /produto/buscarproduto-duplo?tipoProduto=cachorro&categoriaProduto=acessórios*/
+/* URL = /produto/buscarproduto-duplo?tipoProduto=cachorro&categoriaProduto=acessorios*/
 /* URL = /produto/buscarproduto-duplo?tipoProduto=cachorro&categoriaProduto=medicamentos*/
 /* URL = /produto/buscarproduto-duplo?tipoProduto=gato&categoriaProduto=higiene*/
 /* URL = /produto/buscarproduto-duplo?tipoProduto=gato&categoriaProduto=racao*/
-/* URL = /produto/buscarproduto-duplo?tipoProduto=gato&categoriaProduto=acessórios*/
+/* URL = /produto/buscarproduto-duplo?tipoProduto=gato&categoriaProduto=acessorios*/
 /* URL = /produto/buscarproduto-duplo?tipoProduto=gato&categoriaProduto=medicamentos*/
 app.get("/produto/buscarproduto-duplo", produtoController.indexProdutoDuplo);
 

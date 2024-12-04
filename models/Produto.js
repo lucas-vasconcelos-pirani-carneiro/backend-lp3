@@ -6,7 +6,7 @@ const ProdutoSchema = new mongoose.Schema(
         precoProduto: Number,
         descricaoProduto: String,
         categoriaProduto: String,
-        tipoProduto: String
+        tipoProduto: String,
     }
 );
 
